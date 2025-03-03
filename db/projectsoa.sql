@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 03, 2025 at 04:25 AM
+-- Generation Time: Mar 03, 2025 at 05:34 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.10
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `project-soa`
+-- Database: `projectsoa`
 --
 
 -- --------------------------------------------------------
@@ -67,7 +67,7 @@ CREATE TABLE `productorder` (
 --
 
 CREATE TABLE `user` (
-  `id` varchar(255) DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
   `username` varchar(50) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL
@@ -93,6 +93,12 @@ ALTER TABLE `orderdetail`
 -- Indexes for table `productorder`
 --
 ALTER TABLE `productorder`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
