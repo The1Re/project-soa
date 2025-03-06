@@ -6,21 +6,21 @@ package com.example.project_soa.model;
  */
 public class Amulet implements java.io.Serializable {
 
-	private Integer id;
-	private int name;
-	private Integer templeName;
+	private int id;
+	private String name;
+	private String templeName;
 	private int price;
 	private String type;
 
 	public Amulet() {
 	}
 
-	public Amulet(int name, int price) {
+	public Amulet(String name, int price) {
 		this.name = name;
 		this.price = price;
 	}
 
-	public Amulet(int name, Integer templeName, int price, String type) {
+	public Amulet(String name, String templeName, int price, String type) {
 		this.name = name;
 		this.templeName = templeName;
 		this.price = price;
@@ -35,19 +35,19 @@ public class Amulet implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public int getName() {
+	public String getName() {
 		return this.name;
 	}
 
-	public void setName(int name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public Integer getTempleName() {
+	public String getTempleName() {
 		return this.templeName;
 	}
 
-	public void setTempleName(Integer templeName) {
+	public void setTempleName(String templeName) {
 		this.templeName = templeName;
 	}
 
