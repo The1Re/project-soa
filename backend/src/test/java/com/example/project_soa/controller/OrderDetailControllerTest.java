@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,6 +32,7 @@ class OrderDetailControllerTest {
     }
 
     @Test
+    @DisplayName("Should return all order details")
     void testGetAll() {
         List<Orderdetail> orderDetails = Arrays.asList(new Orderdetail(1, 2), new Orderdetail(3, 4));
         when(service.getAll()).thenReturn(orderDetails);
@@ -41,6 +43,7 @@ class OrderDetailControllerTest {
     }
 
     @Test
+    @DisplayName("Should return order detail by ID")
     void testGetById() {
         Orderdetail orderDetail = new Orderdetail(1, 2);
         when(service.getById(1)).thenReturn(orderDetail);
@@ -52,6 +55,7 @@ class OrderDetailControllerTest {
     }
 
     @Test
+    @DisplayName("Should return BAD_REQUEST when order detail is not found")
     void testGetById_NotFound() {
         when(service.getById(1)).thenThrow(new RuntimeException("Orderdetail not found"));
 
@@ -61,6 +65,7 @@ class OrderDetailControllerTest {
     }
 
     @Test
+    @DisplayName("Should return all order details for a specific order ID")
     void testGetAllByOrderId() {
         List<Orderdetail> orderDetails = Arrays.asList(new Orderdetail(1, 2));
         when(service.getAllByOrderId(1)).thenReturn(orderDetails);
@@ -71,6 +76,7 @@ class OrderDetailControllerTest {
     }
 
     @Test
+    @DisplayName("Should create a new order detail")
     void testCreateOrderDetail() {
         Orderdetail orderDetail = new Orderdetail(1, 2);
         when(service.create(orderDetail)).thenReturn(orderDetail);
@@ -82,6 +88,7 @@ class OrderDetailControllerTest {
     }
 
     @Test
+    @DisplayName("Should update an existing order detail")
     void testUpdateOrderDetail() {
         Orderdetail orderDetail = new Orderdetail(1, 2);
         when(service.update(1, orderDetail)).thenReturn(orderDetail);
@@ -93,6 +100,7 @@ class OrderDetailControllerTest {
     }
 
     @Test
+    @DisplayName("Should delete an order detail successfully")
     void testDeleteOrderDetail() {
         doNothing().when(service).delete(1);
 
