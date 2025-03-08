@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Mar 3, 2025, 11:14:06 AM by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class catalog="projectsoa" name="com.example.project_soa.model.User" optimistic-lock="none" table="user">
+        <id name="id" type="string">
+            <column length="255" name="id"/>
+            <generator class="assigned"/>
+        </id>
+        <property name="username" type="string">
+            <column length="50" name="username"/>
+        </property>
+        <property name="password" type="string">
+            <column length="50" name="password"/>
+        </property>
+        <property name="email" type="string">
+            <column length="50" name="email"/>
+        </property>
+    </class>
+</hibernate-mapping>
