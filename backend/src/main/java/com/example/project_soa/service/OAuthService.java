@@ -26,24 +26,23 @@ public class OAuthService {
 
     private static final String GOOGLE_USERINFO_URL = "https://oauth2.googleapis.com/tokeninfo?id_token=";
 
-    // ฟังก์ชันนี้จะดึงข้อมูลโปรไฟล์ของผู้ใช้จาก Google ด้วย access token
+    
     public String getUserProfile(String accessToken) {
-        // สร้าง headers และใส่ access token
+        
         HttpHeaders headers = new HttpHeaders();
 
-        // สร้าง entity สำหรับ request
+       
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        // ใช้ RestTemplate เพื่อส่งคำขอไปยัง Google API
+        
+        //Request GET method with token to google for get user data from google.
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(GOOGLE_USERINFO_URL+accessToken, HttpMethod.GET, entity, String.class);
 
-        // ตรวจสอบ response และรับข้อมูล JSON
+        
         String responseBody = response.getBody();
         
-        System.out.println(responseBody);
-        // สรุปผลลัพธ์ - คุณสามารถแปลง JSON เป็น object หรือ parse ข้อมูลที่ต้องการได้ที่นี่
-        return responseBody;  // ข้อมูล JSON ของผู้ใช้จาก Google
+        return responseBody;  
     }
 
     public JsonNode parseJson(String json) throws Exception {

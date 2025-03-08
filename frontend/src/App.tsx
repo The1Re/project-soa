@@ -24,7 +24,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <GoogleOAuthProvider clientId="">
+    <GoogleOAuthProvider clientId="522245766115-nh76vs67a41cp03cecpd53cajg1rjn60.apps.googleusercontent.com">
       <div>
         {user ? (
           <div>
