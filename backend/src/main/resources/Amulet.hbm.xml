@@ -6,10 +6,10 @@
             <column name="id"/>
             <generator class="identity"/>
         </id>
-        <property name="name" type="int">
+        <property name="name" type="string">
             <column name="name" not-null="true"/>
         </property>
-        <property name="templeName" type="java.lang.Integer">
+        <property name="templeName" type="string">
             <column name="templeName"/>
         </property>
         <property name="price" type="int">
