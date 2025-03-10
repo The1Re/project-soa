@@ -84,6 +84,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>amulets-soa</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

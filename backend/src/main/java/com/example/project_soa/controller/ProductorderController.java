@@ -1,8 +1,17 @@
 package com.example.project_soa.controller;
 
 import com.example.project_soa.model.Productorder;
+import com.example.project_soa.model.User;
+import com.example.project_soa.service.OAuthService;
 import com.example.project_soa.service.ProductorderService;
+import com.fasterxml.jackson.databind.JsonNode;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,10 +19,14 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/orders")
+@CrossOrigin(origins = "http://localhost:5173" , allowCredentials = "true")
 public class ProductorderController {
 
     @Autowired
     private ProductorderService service;
+    
+    @Autowired
+    private OAuthService authService;
 
     @GetMapping
     public List<Productorder> getAllOrders() {
@@ -26,8 +39,12 @@ public class ProductorderController {
     }
 
     @PostMapping
-    public Productorder createOrder(@RequestBody Productorder order) {
-        return service.createOrder(order);
+    public ResponseEntity<Productorder> createOrder(@RequestBody Productorder order , HttpServletRequest request) throws Exception {
+        if(!authService.isAuthenticate(request)) {
+        	return ResponseEntity.status(401).body(null);
+        }
+        
+        return ResponseEntity.ok(service.createOrder(order));
     }
 
     @DeleteMapping("/{id}")

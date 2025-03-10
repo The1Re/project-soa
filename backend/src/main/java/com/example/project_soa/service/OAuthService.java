@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,14 +17,15 @@ import com.example.project_soa.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
 @Service
 public class OAuthService {
 	
 	@Autowired
     private UserRepository userRepository;
-
-    private final RestTemplate restTemplate = new RestTemplate();
-
+	
     private static final String GOOGLE_USERINFO_URL = "https://oauth2.googleapis.com/tokeninfo?id_token=";
 
     
@@ -62,6 +64,28 @@ public class OAuthService {
             newUser.setUsername(name);
             userRepository.save(newUser);
         }
+    }
+    
+    public boolean isAuthenticate(HttpServletRequest request) throws Exception {
+    	Cookie[] cookies = request.getCookies();
+    	
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("token".equals(cookie.getName())) {
+                    String token = cookie.getValue();
+                    System.out.println(token);
+                    if(token == null) {
+                    	return false;
+                    }
+                    String userInfo = getUserProfile(token);
+                    
+                    return true;
+                }
+            }
+        }
+    	
+      
+		return false;
     }
     
 }
