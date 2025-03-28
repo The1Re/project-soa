@@ -1,75 +1,69 @@
-import React, { useState } from 'react'
-import api from '../services/api'
-import { Amulet } from '../models/Amulet'
-import { imageToBase64 } from '../utils/image'
+import React, { useState } from "react";
+import api from "../services/api";
+import { Amulet } from "../models/Amulet";
+import { imageToBase64 } from "../utils/image";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
 
 export default function AddAmulet() {
-  const [formData, setFormData] = useState<Omit<Amulet, 'id'>>({
-    name: '',
-    templeName: '',
-    price: 0,
-    type: '',
-    image: '',
-  })
+    const navigate = useNavigate();
 
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [message, setMessage] = useState('')
-  const [isError, setIsError] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState<Omit<Amulet, "id">>({
+    name: "",
+    templeName: "",
+    price: 0,
+    type: "",
+    image: "",
+  });
+
+  const [, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
+    const { name, value } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: name === 'price' ? Number(value) : value,
-    }))
-  }
+      [name]: name === "price" ? Number(value) : value,
+    }));
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file)
+      setImageFile(file);
 
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
-        const fullBase64 = reader.result as string
-        setFormData(prev => ({
+        const fullBase64 = reader.result as string;
+        setFormData((prev) => ({
           ...prev,
-          image: imageToBase64(fullBase64), 
-        }))
-        setImagePreview(fullBase64) 
-      }
-      reader.readAsDataURL(file)
+          image: imageToBase64(fullBase64),
+        }));
+        setImagePreview(fullBase64);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setMessage('')
-    setIsError(false)
+    e.preventDefault();
 
-    try {
-      console.log('📦 ส่งข้อมูลไปยัง API:', formData)
+    toast.promise(
+        api.post("/amulets", formData).then(() => {
+          navigate("/amulets");
+        }),
+        {
+          loading: "กำลังลงขายพระเครื่อง...",
+          success: "ลงขายพระเครื่องสำเร็จ!",
+          error: (err) => `เกิดข้อผิดพลาด: ${err.message}`,
+        }
+      );
+  };
 
-      await api.post('/amulets', formData) 
-
-      setMessage('ลงขายพระเครื่องสำเร็จ!')
-      setFormData({ name: '', templeName: '', price: 0, type: '', image: '' })
-      setImageFile(null)
-      setImagePreview(null)
-    } catch (error) {
-      console.error(error)
-      setMessage('เกิดข้อผิดพลาดในการลงขาย')
-      setIsError(true)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-2xl rounded mb-10">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-2xl rounded mb-10 relative">
       <h2 className="text-2xl font-bold mb-4 text-center">ลงขายพระเครื่อง</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -130,7 +124,11 @@ export default function AddAmulet() {
               required
             />
             {imagePreview ? (
-              <img src={imagePreview} alt="Preview" className="object-cover w-full h-full" />
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="object-cover w-full h-full"
+              />
             ) : (
               <span className="text-4xl text-gray-400">+</span>
             )}
@@ -140,16 +138,10 @@ export default function AddAmulet() {
         <button
           type="submit"
           className="w-full bg-amber-500 text-white py-2 rounded hover:bg-amber-600 transition"
-          disabled={isSubmitting}
         >
-          {isSubmitting ? 'กำลังลงขาย...' : 'ลงขาย'}
+          ลงขาย
         </button>
-        {message && (
-          <p className={`text-center text-sm mt-2 ${isError ? 'text-red-600' : 'text-green-600'}`}>
-            {message}
-          </p>
-        )}
       </form>
     </div>
-  )
+  );
 }
