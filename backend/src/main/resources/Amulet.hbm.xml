@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Generated Mar 3, 2025, 11:14:06 AM by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 28, 2025, 10:00:24 PM by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
     <class catalog="projectsoa" name="com.example.project_soa.model.Amulet" optimistic-lock="none" table="amulet">
         <id name="id" type="java.lang.Integer">
@@ -7,16 +7,19 @@
             <generator class="identity"/>
         </id>
         <property name="name" type="string">
-            <column name="name" not-null="true"/>
+            <column length="255" name="name" not-null="true"/>
         </property>
         <property name="templeName" type="string">
-            <column name="templeName"/>
+            <column length="255" name="templeName"/>
         </property>
         <property name="price" type="int">
             <column name="price" not-null="true"/>
         </property>
         <property name="type" type="string">
             <column length="255" name="type"/>
+        </property>
+        <property name="image" type="binary">
+            <column name="image"/>
         </property>
     </class>
 </hibernate-mapping>

@@ -11,6 +11,7 @@ import com.example.project_soa.service.AmuletService;
 
 @RestController
 @RequestMapping("/amulets")
+@CrossOrigin(origins = "http://localhost:5173" , allowCredentials = "true")
 public class AmuletController {
 
     @Autowired

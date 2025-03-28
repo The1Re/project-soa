@@ -3,5 +3,6 @@ export interface Amulet {
     name: string,
     templeName: string,
     price: number,
-    type: string
+    type: string,
+    image: string
 }
