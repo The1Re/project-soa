@@ -1,14 +1,15 @@
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBagShopping, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBagShopping, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
+interface HeaderProps {
+  setOpenCart: (open: boolean) => void;
+}
 
-
-export default function Header() {
+export default function Header({ setOpenCart }: HeaderProps) {
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center px-6 py-4">
-        {/* Logo/Home Section */}
+        {/* Logo */}
         <div className="text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors">
           Logo
         </div>
@@ -20,16 +21,15 @@ export default function Header() {
             <div className="bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-md">
               <span className="font-semibold">HI</span>
             </div>
-            <div className="text-gray-800 font-medium">
-              Hatsawat Intrasod
-            </div>
+            <div className="text-gray-800 font-medium">Hatsawat Intrasod</div>
           </div>
 
           {/* Icons */}
           <div className="flex items-center space-x-5">
             {/* Shopping Bag */}
-            <div 
+            <div
               className="text-gray-600 hover:text-blue-600 transition-colors relative cursor-pointer"
+              onClick={() => setOpenCart(true)}
             >
               <FontAwesomeIcon icon={faBagShopping} size="xl" />
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -38,9 +38,7 @@ export default function Header() {
             </div>
 
             {/* Search */}
-            <button 
-              className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer"
-            >
+            <button className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer">
               <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" />
             </button>
           </div>
@@ -49,4 +47,3 @@ export default function Header() {
     </header>
   );
 }
-
