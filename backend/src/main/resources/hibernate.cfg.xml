@@ -6,7 +6,8 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://soa-project-soa-project.h.aivencloud.com:24399/projectsoa</property>
-        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.username">avnadmin</property>
+        <property name="hibernate.connection.password">AVNS_Y9RRA6BUVOp_nv_JXIg</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     </session-factory>
 </hibernate-configuration>
