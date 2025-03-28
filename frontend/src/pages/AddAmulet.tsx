@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import api from '../services/api'
 import { Amulet } from '../models/Amulet'
+import { imageToBase64 } from '../utils/image'
 
 export default function AddAmulet() {
   const [formData, setFormData] = useState<Omit<Amulet, 'id'>>({
@@ -8,8 +9,10 @@ export default function AddAmulet() {
     templeName: '',
     price: 0,
     type: '',
+    image: '',
   })
 
+  const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [message, setMessage] = useState('')
   const [isError, setIsError] = useState(false)
@@ -26,7 +29,18 @@ export default function AddAmulet() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      setImagePreview(URL.createObjectURL(file))
+      setImageFile(file)
+
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const fullBase64 = reader.result as string
+        setFormData(prev => ({
+          ...prev,
+          image: imageToBase64(fullBase64), 
+        }))
+        setImagePreview(fullBase64) 
+      }
+      reader.readAsDataURL(file)
     }
   }
 
@@ -37,13 +51,13 @@ export default function AddAmulet() {
     setIsError(false)
 
     try {
-    
-      const A = await api.get('/amulets', )
-    console.log('ส่งข้อมูลไปยัง API:', A)
+      console.log('📦 ส่งข้อมูลไปยัง API:', formData)
 
+      await api.post('/amulets', formData) 
 
       setMessage('ลงขายพระเครื่องสำเร็จ!')
-      setFormData({ name: '', templeName: '', price: 0, type: '' })
+      setFormData({ name: '', templeName: '', price: 0, type: '', image: '' })
+      setImageFile(null)
       setImagePreview(null)
     } catch (error) {
       console.error(error)
@@ -104,7 +118,7 @@ export default function AddAmulet() {
           />
         </div>
 
-        {/* กล่องรูปภาพ */}
+        {/* กล่องอัปโหลดภาพ */}
         <div>
           <label className="block font-medium mb-1">รูปภาพพระเครื่อง</label>
           <div className="w-40 h-40 border-2 border-dashed border-gray-300 flex items-center justify-center rounded cursor-pointer relative overflow-hidden">
@@ -113,6 +127,7 @@ export default function AddAmulet() {
               accept="image/*"
               onChange={handleImageChange}
               className="absolute w-full h-full opacity-0 cursor-pointer"
+              required
             />
             {imagePreview ? (
               <img src={imagePreview} alt="Preview" className="object-cover w-full h-full" />
