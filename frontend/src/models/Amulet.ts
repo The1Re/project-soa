@@ -4,5 +4,5 @@ export interface Amulet {
     templeName: string,
     price: number,
     type: string,
-    image: Blob
+    image: string
 }
