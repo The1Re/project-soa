@@ -1,10 +1,22 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CartSlideOver from "../components/Cart";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Amulet } from "../models/Amulet";
+import api from "../services/api";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const [openCart, setOpenCart] = useState(false);
+  const [cart , setCart] = useState<Amulet[]>([]);
+
+  // const fetch = async () => {
+  //   const amulet = await api.get("/amulets");
+  //   console.log(amulet);
+  // }
+
+  // useEffect(()=>{
+  //   fetch();
+  // },[])
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -16,8 +28,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         {children}
       </main>
 
-      {/* Cart SlideOver อยู่ระหว่าง Header กับ Footer */}
-      <CartSlideOver open={openCart} setOpen={setOpenCart} />
+      {/* Cart SlideOver */}
+      <CartSlideOver open={openCart} setOpen={setOpenCart} cart={cart} setCart={setCart}/>
 
       {/* Footer */}
       <Footer />

@@ -1,39 +1,49 @@
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { Amulet } from '../models/Amulet'
 
-const products = [
+const products:Amulet[] = [
   {
-    id: 1,
-    name: 'Throwback Hip Bag',
-    href: '#',
-    color: 'Salmon',
-    price: '$90.00',
-    quantity: 1,
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-    imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
+    id : 1,
+    name : "พระปิดตาหลังยันต์นะ หลวงปู่โต๊ะ",
+    templeName : "วัดประดู่ฉิมพลี",
+    price : 1390,
+    type : "หลังยันต์นะ เนื้อผง ฝั่งตะกรุดเงิน",
   },
   {
-    id: 2,
-    name: 'Medium Stuff Satchel',
-    href: '#',
-    color: 'Blue',
-    price: '$32.00',
-    quantity: 1,
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
-    imageAlt:
-      'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
+    id : 2,
+    name : "พระปิดตาหลังยันต์นะ หลวงปู่โต๊ะ",
+    templeName : "วัดประดู่ฉิมพลี",
+    price : 2000,
+    type : "หลังยันต์นะ เนื้อผง ฝั่งตะกรุดเงิน",
   },
-  // More products...
 ]
 
 interface CartSlideOverProps {
   open : boolean;
   setOpen : Dispatch<SetStateAction<boolean>>;
+  cart : Amulet[];
+  setCart : Dispatch<SetStateAction<Amulet[]>>;
 }
 
-export default function CartSlideOver({open , setOpen}: CartSlideOverProps) {
+export default function CartSlideOver({open , setOpen, cart, setCart}: CartSlideOverProps) {
+  const [total , setTotal] = useState<number>(0);
+
+  useEffect(()=>{
+    setCart(products);
+  },[]);
+
+  useEffect(() => {
+    const t = cart?.reduce((sum , amulet) => sum + amulet.price,0);
+    setTotal(t);
+  },[cart]);
+
+  const removeAmulet = (index: number, event: React.MouseEvent<HTMLButtonElement>) => {
+    const c = cart.filter((amulet , idx) => idx != index);
+    setCart(c);
+  };
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -69,27 +79,27 @@ export default function CartSlideOver({open , setOpen}: CartSlideOverProps) {
                   <div className="mt-8">
                     <div className="flow-root">
                       <ul role="list" className="-my-6 divide-y divide-gray-200">
-                        {products.map((product) => (
-                          <li key={product.id} className="flex py-6">
+                        {cart.map((product , index) => (
+                          <li key={index} className="flex py-6">
                             <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
-                              <img alt={product.imageAlt} src={product.imageSrc} className="size-full object-cover" />
+                              {/* <img alt={product.imageAlt} src={product.imageSrc} className="size-full object-cover" /> */}
                             </div>
 
                             <div className="ml-4 flex flex-1 flex-col">
                               <div>
                                 <div className="flex justify-between text-base font-medium text-gray-900">
                                   <h3>
-                                    <a href={product.href}>{product.name}</a>
+                                    {product.name}
                                   </h3>
                                   <p className="ml-4">{product.price}</p>
                                 </div>
-                                <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+                                <p className="mt-1 text-sm text-gray-500">{product.type}</p>
                               </div>
-                              <div className="flex flex-1 items-end justify-between text-sm">
-                                <p className="text-gray-500">Qty {product.quantity}</p>
+                              <div className="flex flex-1 items-end justify-end text-sm">
+                                {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
 
                                 <div className="flex">
-                                  <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                  <button type="button" onClick={(e)=>removeAmulet(index,e)} className="font-medium cursor-pointer text-indigo-600 hover:text-indigo-500">
                                     Remove
                                   </button>
                                 </div>
@@ -105,9 +115,9 @@ export default function CartSlideOver({open , setOpen}: CartSlideOverProps) {
                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                   <div className="flex justify-between text-base font-medium text-gray-900">
                     <p>Subtotal</p>
-                    <p>$262.00</p>
+                    <p>{total}</p>
                   </div>
-                  <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                  {/* <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p> */}
                   <div className="mt-6">
                     <a
                       href="#"
