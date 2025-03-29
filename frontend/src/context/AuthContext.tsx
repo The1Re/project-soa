@@ -39,7 +39,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const getUser = async () => {
       try {
-        const token = localStorage.getItem("token");;
+        const token = localStorage.getItem("token");
+        console.log(token);
         const userInfoResponse = await axios.get(`${import.meta.env.VITE_GOOGLE_USERINFO_URL}id_token=${token}`);
         const userInfo:User = {
           id : userInfoResponse.data.sub,
@@ -48,6 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           username : userInfoResponse.data.name,
           image : userInfoResponse.data.picture,
         }
+        document.cookie = `token=${token}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT; SameSite=None; Secure`;
         setUser(userInfo);
       } catch (error) {
         console.log(error);

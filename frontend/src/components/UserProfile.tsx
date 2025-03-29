@@ -1,5 +1,4 @@
 import { User } from "../models/User";
-import { IMAGE_NOT_FOUND } from "../utils/image";
 
 const UserProfile = ({ username, image }: User) => {
   console.log(image);
