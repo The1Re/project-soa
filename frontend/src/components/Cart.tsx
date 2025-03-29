@@ -1,49 +1,18 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import { Amulet } from '../models/Amulet'
-
-const products:Amulet[] = [
-  {
-    id : 1,
-    name : "พระปิดตาหลังยันต์นะ หลวงปู่โต๊ะ",
-    templeName : "วัดประดู่ฉิมพลี",
-    price : 1390,
-    type : "หลังยันต์นะ เนื้อผง ฝั่งตะกรุดเงิน",
-  },
-  {
-    id : 2,
-    name : "พระปิดตาหลังยันต์นะ หลวงปู่โต๊ะ",
-    templeName : "วัดประดู่ฉิมพลี",
-    price : 2000,
-    type : "หลังยันต์นะ เนื้อผง ฝั่งตะกรุดเงิน",
-  },
-]
+import { useCart } from '../context'
+import { CartCard } from './CartCard'
 
 interface CartSlideOverProps {
   open : boolean;
   setOpen : Dispatch<SetStateAction<boolean>>;
-  cart : Amulet[];
-  setCart : Dispatch<SetStateAction<Amulet[]>>;
 }
 
-export default function CartSlideOver({open , setOpen, cart, setCart}: CartSlideOverProps) {
-  const [total , setTotal] = useState<number>(0);
-
-  useEffect(()=>{
-    setCart(products);
-  },[]);
-
-  useEffect(() => {
-    const t = cart?.reduce((sum , amulet) => sum + amulet.price,0);
-    setTotal(t);
-  },[cart]);
-
-  const removeAmulet = (index: number, event: React.MouseEvent<HTMLButtonElement>) => {
-    const c = cart.filter((amulet , idx) => idx != index);
-    setCart(c);
-  };
+export default function CartSlideOver({open , setOpen}: CartSlideOverProps) {
+  const {cart} = useCart();
+  const total = cart.reduce((sum, amulet) => sum + amulet.price, 0);
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -79,33 +48,8 @@ export default function CartSlideOver({open , setOpen, cart, setCart}: CartSlide
                   <div className="mt-8">
                     <div className="flow-root">
                       <ul role="list" className="-my-6 divide-y divide-gray-200">
-                        {cart.map((product , index) => (
-                          <li key={index} className="flex py-6">
-                            <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
-                              {/* <img alt={product.imageAlt} src={product.imageSrc} className="size-full object-cover" /> */}
-                            </div>
-
-                            <div className="ml-4 flex flex-1 flex-col">
-                              <div>
-                                <div className="flex justify-between text-base font-medium text-gray-900">
-                                  <h3>
-                                    {product.name}
-                                  </h3>
-                                  <p className="ml-4">{product.price}</p>
-                                </div>
-                                <p className="mt-1 text-sm text-gray-500">{product.type}</p>
-                              </div>
-                              <div className="flex flex-1 items-end justify-end text-sm">
-                                {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
-
-                                <div className="flex">
-                                  <button type="button" onClick={(e)=>removeAmulet(index,e)} className="font-medium cursor-pointer text-indigo-600 hover:text-indigo-500">
-                                    Remove
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
+                        {cart.map((amulet , index) => (
+                          <CartCard key={index} {...amulet} index={index} />
                         ))}
                       </ul>
                     </div>
