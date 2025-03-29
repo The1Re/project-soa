@@ -3,9 +3,11 @@ import { useCart } from "../context"
 import { Amulet } from "../models/Amulet"
 import Image from "./Image"
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function AmuletCard({ image, name, price, type, id, templeName }: Amulet) {
     const { addToCart } = useCart();
+    const navigate = useNavigate();
     const [showPopup, setShowPopup] = useState<string | null>(null);
     
     const add = () => {
@@ -40,7 +42,7 @@ function AmuletCard({ image, name, price, type, id, templeName }: Amulet) {
     return (
         <div className="group hover:scale-105 transition-transform duration-200 ease-in-out">
             <div className="aspect-square w-full overflow-hidden rounded-lg bg-gray-100">
-                <Image style="h-full w-full object-cover object-center cursor-pointer" image={image} alt={name} />
+                <Image onClick={() => navigate(`/amulets/${id}`)} style="h-full w-full object-cover object-center cursor-pointer" image={image} alt={name} />
             </div>
             <h3 className="mt-4 text-lg font-bold text-gray-700">{name}</h3>
             <h3 className="text-sm text-gray-700">{type}</h3>
