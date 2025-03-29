@@ -27,40 +27,69 @@ const OrderHistory: React.FC = () => {
   }
 
   return (
-    <div>
-      <h2>Order History for {userId}</h2>
-      <ul>
-        {order.map((o) => {
-          const orderDetail = mockOrderDetails.filter(
-            (od) => od.orderId === o.id
-          );
-          
+    <div className="container mx-auto px-4 py-6">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        Order History for {userId}
+      </h2>
 
-          return (
-            <li key={o.id}>
-              <p>Order #{o.id} </p>
-              <ul>
-                {orderDetail.map((od) => {
-                  const amulet = mockAmulets.find((a) => a.id === od.productId);
-                  return <li key={od.id}>
-                      <p>productId :{amulet?.id}</p>
-                      <p>name :{amulet?.name}</p>
-                      <p>price :{amulet?.price}</p>
-                      <p>templeName :{amulet?.templeName}</p>
-                      <p>type :{amulet?.type}</p>
-                      <p>image :{amulet?.image}</p>
-                  </li>;
-                })}
-              </ul>
-            </li>
-          );
-        })}
-      </ul>
-      <ul>
-        {order.map((o) => (
-          <li key={o.id}></li>
-        ))}
-      </ul>
+      {order.length === 0 ? (
+        <p className="text-gray-600">No orders found.</p>
+      ) : (
+        <div className="space-y-6">
+          {order.map((order) => {
+            const orderDetails = mockOrderDetails.filter(
+              (od) => od.orderId === order.id
+            );
+
+            return (
+              <div
+                key={order.id}
+                className="bg-white shadow-md rounded-lg p-6 border border-gray-100"
+              >
+                <h3 className="text-xl font-semibold mb-4 text-gray-900">
+                  Order #{order.id}
+                </h3>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {orderDetails.map((orderDetail) => {
+                    const amulet = mockAmulets.find(
+                      (a) => a.id === orderDetail.productId
+                    );
+
+                    if (!amulet) return null;
+
+                    return (
+                      <div
+                        key={orderDetail.id}
+                        className="border rounded-md p-4 hover:shadow-sm transition-shadow"
+                      >
+                        {amulet.image && (
+                          <img
+                            src={amulet.image}
+                            alt={amulet.name}
+                            className="w-full h-48 object-cover rounded-md mb-4"
+                          />
+                        )}
+
+                        <div className="space-y-2">
+                          <p className="font-medium text-gray-900">
+                            {amulet.name}
+                          </p>
+                          <div className="text-sm text-gray-600 space-y-1">
+                            <p>Price: {amulet.price} ฿</p>
+                            <p>Temple: {amulet.templeName}</p>
+                            <p>Type: {amulet.type}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
