@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBagShopping, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import { useCart } from "../context";
 import { useEffect, useState } from "react";
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
@@ -73,10 +73,6 @@ export default function Header({ setOpenCart }: HeaderProps) {
 
             </div>
 
-            {/* Search */}
-            <button className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer">
-              <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" />
-            </button>
           </div>
         </div>
       </div>
