@@ -4,16 +4,20 @@ import api from "../services/api";
 import { getRandomItems } from "../utils/itemRandom";
 import AmuletCard from "./AmuletCard";
 
-function AmuletsRecommend() {
+function AmuletsRecommend({ amuletFocus }: { amuletFocus?: Amulet }) {
     const [amulets, setAmulets] = useState<Amulet[]>([]);
 
     useEffect(() => {
         api.get<Amulet[]>("/amulets")
             .then((response) => {
-                setAmulets(getRandomItems(response.data, 4));
+                let recommend: Amulet[] = [];
+                do {
+                    recommend = getRandomItems(response.data, 4);
+                } while (recommend.some((amulet) => amulet.id === amuletFocus?.id));
+                setAmulets(recommend);
             })
             .catch(console.error)
-    }, []);
+    }, [amuletFocus]);
 
     return (
         <div className="mt-4">

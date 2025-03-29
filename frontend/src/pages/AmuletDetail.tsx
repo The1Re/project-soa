@@ -121,7 +121,7 @@ function AmuletDetail() {
             </div>
 
             {/* Related amulets - you could add this section later */}
-            <AmuletsRecommend />
+            <AmuletsRecommend amuletFocus={amulet} />
         </div>
     );
 }
