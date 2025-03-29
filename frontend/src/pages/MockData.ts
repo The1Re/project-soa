@@ -3,9 +3,9 @@ import { Order, OrderDetail } from "../models/Order";
 
 
 export const mockOrders: Order[] = [
-  { id: 1, cusId: "C001", totalPrice: 500 },
-  { id: 2, cusId: "C001", totalPrice: 1200 },
-  { id: 3, cusId: "C001", totalPrice: 800 },
+  { id: 1, cusId: "115330487163353712238", totalPrice: 500 },
+  { id: 2, cusId: "115330487163353712238", totalPrice: 1200 },
+  { id: 3, cusId: "115330487163353712238", totalPrice: 800 },
 
 ];
 

@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { mockOrders, mockAmulets, mockOrderDetails } from "./MockData";
 import { Order } from "../models/Order";
 import Loading from "../components/Loading";
+import { useAuth } from "../context/AuthContext";
 
 const OrderHistory: React.FC = () => {
   const [order, setOrder] = useState<Order[]>([]);
   const [loading, setloading] = useState<boolean>(true);
-  const userId = "C001"; //mock userid
+  const user = useAuth().user;
+  // console.log("userid with auth",user?.id);
+  const userId = user?.id;
   // console.log(order)
 
   useEffect(() => {
@@ -29,7 +32,7 @@ const OrderHistory: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-6">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">
-        Order History for {userId}
+        Order History for {user?.username}
       </h2>
 
       {order.length === 0 ? (
