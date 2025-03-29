@@ -1,14 +1,30 @@
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBagShopping, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBagShopping, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useCart } from "../context";
+import { useEffect, useState } from "react";
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { useAuth } from "../context/AuthContext";
+import UserProfile from "./UserProfile";
 
+interface HeaderProps {
+  setOpenCart: (open: boolean) => void;
+}
 
+export default function Header({ setOpenCart }: HeaderProps) {
+  const { cart } = useCart();
+  const { login , user } = useAuth();
+  const [total, setTotal] = useState<number>(0);
 
-export default function Header() {
+  useEffect(() => {
+    setTotal(cart.length);
+  }, [cart]);
+
+    
+
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center px-6 py-4">
-        {/* Logo/Home Section */}
+        {/* Logo */}
         <div className="text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors">
           Logo
         </div>
@@ -17,30 +33,48 @@ export default function Header() {
         <div className="flex items-center space-x-6">
           {/* User Profile */}
           <div className="flex items-center space-x-4">
-            <div className="bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-md">
-              <span className="font-semibold">HI</span>
-            </div>
-            <div className="text-gray-800 font-medium">
-              Hatsawat Intrasod
+            <div className="text-gray-600 font-semibold border-r border-gray-300 px-6 hover:text-blue-600 transition-all cursor-pointer">
+
+            {
+              user ? 
+              <UserProfile  { ...user }/> 
+              : 
+              (
+              <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+                <GoogleLogin
+                  onSuccess={login}
+                  onError={(error:void) => console.log('Login Failed:', error)}
+                />
+              </GoogleOAuthProvider>
+              )
+            }
             </div>
           </div>
+          {/* <UserProfile /> */}
 
           {/* Icons */}
-          <div className="flex items-center space-x-5">
+          <div className="flex items-center space-x-6">
             {/* Shopping Bag */}
-            <div 
-              className="text-gray-600 hover:text-blue-600 transition-colors relative cursor-pointer"
+            <div
+              className={`text-gray-600 hover:text-blue-600 transition-all relative cursor-pointer ${total > 0 ? "animate-bounce" : ""}`}
+              onClick={() => setOpenCart(true)}
             >
               <FontAwesomeIcon icon={faBagShopping} size="xl" />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                0
-              </span>
+              {
+                total > 0 ?
+                  (<span
+                    className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+                  >
+                    {total}
+                  </span>)
+                  :
+                  (<></>)
+              }
+
             </div>
 
             {/* Search */}
-            <button 
-              className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer"
-            >
+            <button className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer">
               <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" />
             </button>
           </div>
@@ -49,4 +83,3 @@ export default function Header() {
     </header>
   );
 }
-

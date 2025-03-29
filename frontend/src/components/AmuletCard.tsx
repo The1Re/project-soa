@@ -1,9 +1,24 @@
+import { useCart } from "../context"
 import { Amulet } from "../models/Amulet"
 import Image from "./Image"
 
-function AmuletCard({ image, name, price, type } : Amulet ) {
+function AmuletCard({ image, name, price, type, id, templeName }: Amulet) {
+    const { addToCart } = useCart();
+    
+    const add = () => {
+        const amulet:Amulet = {
+            id : id,
+            name: name,
+            templeName: templeName,
+            price: price,
+            type: type,
+            image: image
+        }
+        addToCart(amulet);
+    }
+
     return (
-        <div className="cursor-pointer group">
+        <div onClick={() => add()} className="cursor-pointer group">
             <div className="aspect-square w-full overflow-hidden rounded-lg bg-gray-100">
                 <Image image={image} alt={name} />
             </div>
