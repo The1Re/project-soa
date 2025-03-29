@@ -91,6 +91,22 @@ const OrderHistory: React.FC = () => {
         </div>
       )}
     </div>
+    // <div>
+    //   {order.map((o) => {
+    //     const orderDetails = mockOrderDetails.filter((od) => od.orderId === o.id)
+    //     return <div key={o.id}>
+    //         order#{o.id}
+    //         {orderDetails.map((od) => {
+    //           const amulet = mockAmulets.find((a) => a.id === od.productId);
+    //           return <div key={od.id}>
+    //                 {amulet?.id}
+    //                 {amulet?.name}
+    //           </div>;
+    //         })}
+    //     </div>
+    //   } )}
+
+    // </div>
   );
 };
 
