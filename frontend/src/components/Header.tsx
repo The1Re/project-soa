@@ -4,6 +4,7 @@ import { useCart } from "../context";
 import { useEffect, useState } from "react";
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { useAuth } from "../context/AuthContext";
+import UserProfile from "./UserProfile";
 
 interface HeaderProps {
   setOpenCart: (open: boolean) => void;
@@ -11,13 +12,14 @@ interface HeaderProps {
 
 export default function Header({ setOpenCart }: HeaderProps) {
   const { cart } = useCart();
-  const { login } = useAuth();
+  const { login , user } = useAuth();
   const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
     setTotal(cart.length);
   }, [cart]);
 
+    
 
   return (
     <header className="bg-white shadow-md">
@@ -32,12 +34,20 @@ export default function Header({ setOpenCart }: HeaderProps) {
           {/* User Profile */}
           <div className="flex items-center space-x-4">
             <div className="text-gray-600 font-semibold border-r border-gray-300 px-6 hover:text-blue-600 transition-all cursor-pointer">
-            <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-              <GoogleLogin
-                onSuccess={login}
-                onError={(error:void) => console.log('Login Failed:', error)}
-              />
-            </GoogleOAuthProvider>
+
+            {
+              user ? 
+              <UserProfile  { ...user }/> 
+              : 
+              (
+              <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+                <GoogleLogin
+                  onSuccess={login}
+                  onError={(error:void) => console.log('Login Failed:', error)}
+                />
+              </GoogleOAuthProvider>
+              )
+            }
             </div>
           </div>
           {/* <UserProfile /> */}
