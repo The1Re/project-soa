@@ -12,7 +12,7 @@ function Image({ image, alt, style } : ImageProps) {
             src={base64ToImage(image)}
             alt={alt}
             onError={(e) => e.currentTarget.src = IMAGE_NOT_FOUND}
-            className={ style ? style : "h-full w-full object-cover object-center group-hover:opacity-75"}
+            className={ style ? style : "h-full w-full object-cover object-center "}
         />
     )
 }
