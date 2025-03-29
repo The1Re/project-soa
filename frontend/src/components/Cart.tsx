@@ -1,17 +1,23 @@
-import { Dispatch, SetStateAction } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import { useCart } from '../context'
-import { CartCard } from './CartCard'
+import { Dispatch, SetStateAction } from "react";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { useCart } from "../context";
+import { CartCard } from "./CartCard";
+import { Link } from "react-router-dom";
 
 interface CartSlideOverProps {
-  open : boolean;
-  setOpen : Dispatch<SetStateAction<boolean>>;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function CartSlideOver({open , setOpen}: CartSlideOverProps) {
-  const {cart} = useCart();
+export default function CartSlideOver({ open, setOpen }: CartSlideOverProps) {
+  const { cart } = useCart();
   const total = cart.reduce((sum, amulet) => sum + amulet.price, 0);
 
   return (
@@ -31,7 +37,9 @@ export default function CartSlideOver({open , setOpen}: CartSlideOverProps) {
               <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                 <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                   <div className="flex items-start justify-between">
-                    <DialogTitle className="text-lg font-medium text-gray-900">Shopping cart</DialogTitle>
+                    <DialogTitle className="text-lg font-medium text-gray-900">
+                      Shopping cart
+                    </DialogTitle>
                     <div className="ml-3 flex h-7 items-center">
                       <button
                         type="button"
@@ -40,15 +48,18 @@ export default function CartSlideOver({open , setOpen}: CartSlideOverProps) {
                       >
                         <span className="absolute -inset-0.5" />
                         <span className="sr-only">Close panel</span>
-                        <FontAwesomeIcon icon={faXmark}/>
+                        <FontAwesomeIcon icon={faXmark} />
                       </button>
                     </div>
                   </div>
 
                   <div className="mt-8">
                     <div className="flow-root">
-                      <ul role="list" className="-my-6 divide-y divide-gray-200">
-                        {cart.map((amulet , index) => (
+                      <ul
+                        role="list"
+                        className="-my-6 divide-y divide-gray-200"
+                      >
+                        {cart.map((amulet, index) => (
                           <CartCard key={index} {...amulet} index={index} />
                         ))}
                       </ul>
@@ -63,16 +74,16 @@ export default function CartSlideOver({open , setOpen}: CartSlideOverProps) {
                   </div>
                   {/* <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p> */}
                   <div className="mt-6">
-                    <a
-                      href="#"
+                    <Link
+                      to="/checkout"
                       className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700"
                     >
                       Checkout
-                    </a>
+                    </Link>
                   </div>
                   <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                     <p>
-                      or{' '}
+                      or{" "}
                       <button
                         type="button"
                         onClick={() => setOpen(false)}
@@ -90,5 +101,5 @@ export default function CartSlideOver({open , setOpen}: CartSlideOverProps) {
         </div>
       </div>
     </Dialog>
-  )
+  );
 }

@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import OrderHistory from "../pages/OrderHistory";
 import AddAmulet from "../pages/AddAmulet";
 import Amulets from "../pages/Amulets";
+import Checkout from "../pages/Checkout";
 
 
 export default function AppRoutes() {
@@ -14,6 +15,7 @@ export default function AppRoutes() {
         <Route path="/OrderHistory" element={<OrderHistory />} />
         <Route path="/amulet-add" element={<AddAmulet />} />
         <Route path="/amulets" element={<Amulets />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </MainLayout>
   );

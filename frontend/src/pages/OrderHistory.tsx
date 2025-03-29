@@ -11,7 +11,7 @@ const OrderHistory: React.FC = () => {
   // console.log("userid with auth",user?.id);
   const userId = user?.id;
   // console.log(order)
-
+  
   useEffect(() => {
     setloading(true);
 
@@ -25,8 +25,17 @@ const OrderHistory: React.FC = () => {
     console.log(userId);
   }, [userId]);
 
+
   if (loading) {
     return <Loading />;
+  }
+
+  if (!user) {
+    return (
+      <div className="text-center text-black-500 text-lg font-semibold mt-30">
+        No user. Please log in.
+      </div>
+    );
   }
 
   return (
@@ -34,7 +43,6 @@ const OrderHistory: React.FC = () => {
       <h2 className="text-2xl font-bold mb-6 text-gray-800">
         Order History for {user?.username}
       </h2>
-
       {order.length === 0 ? (
         <p className="text-gray-600">No orders found.</p>
       ) : (
