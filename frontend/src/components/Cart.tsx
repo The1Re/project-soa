@@ -59,8 +59,8 @@ export default function CartSlideOver({ open, setOpen }: CartSlideOverProps) {
                         role="list"
                         className="-my-6 divide-y divide-gray-200"
                       >
-                        {cart.map((amulet, index) => (
-                          <CartCard key={index} {...amulet} index={index} />
+                        {cart?.map((item, index) => (
+                          <CartCard key={index} item={item} index={index} />
                         ))}
                       </ul>
                     </div>

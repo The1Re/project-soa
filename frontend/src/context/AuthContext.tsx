@@ -6,7 +6,7 @@ import axios from "axios";
 
 interface AuthContextType {
     user : User | null;
-    login : (response:any) => void;
+    login : (response: CredentialResponse) => void;
     logout : () => void;
     getUser : () => void;
 }
@@ -20,10 +20,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { credential } = response;
         const token = credential || "";
         try {
-            const response = await api.post('/oauth2/callback' , {token : credential} , {withCredentials : true});
+            const response = await api.post('/oauth2/callback' , {token : credential} , {withCredentials : false});
             console.log(response.data);
             localStorage.setItem("token", token);
-            const userInfoResponse = await axios.get(`${import.meta.env.VITE_GOOGLE_USERINFO_URL}id_token=${credential}`);
+            const userInfoResponse = await axios.get(`${import.meta.env.VITE_GOOGLE_USERINFO_URL}id_token=${credential}`  , {withCredentials : false});
             const userInfo:User = {
               id : userInfoResponse.data.sub,
               email : userInfoResponse.data.email,
@@ -41,7 +41,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const token = localStorage.getItem("token");
         console.log(token);
-        const userInfoResponse = await axios.get(`${import.meta.env.VITE_GOOGLE_USERINFO_URL}id_token=${token}`);
+        if (!token) {
+          return ;
+        } 
+        const userInfoResponse = await axios.get(`${import.meta.env.VITE_GOOGLE_USERINFO_URL}id_token=${token}` , {withCredentials : false});
         const userInfo:User = {
           id : userInfoResponse.data.sub,
           email : userInfoResponse.data.email,
@@ -49,7 +52,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           username : userInfoResponse.data.name,
           image : userInfoResponse.data.picture,
         }
-        document.cookie = `token=${token}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT; SameSite=None; Secure`;
         setUser(userInfo);
       } catch (error) {
         console.log(error);

@@ -3,6 +3,7 @@ import { useCart } from "../context";
 import Image from "../components/Image";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 
 interface Order {
@@ -16,49 +17,74 @@ interface OrderDetail {
 }
 
 const Checkout: React.FC = () => {
-  const { cart } = useCart();
+  const { cart , clearCart } = useCart();
   const { user } = useAuth();
   const total = cart.reduce((sum, item) => sum + item.price, 0);
   const [loading , setLoading] = useState(false);
+  const navigate = useNavigate();
 
   console.log(cart);
 
-  const postData = async (endpoint:string , data: Order | OrderDetail) => {
+  const postData = async (endpoint: string, data: Order | OrderDetail) => {
     try {
-      const response = await api.post(endpoint , data , {withCredentials : true});
-      console.log(response.data);
+      const response = await api.post(endpoint, data, { withCredentials: true });
+      console.log("Response:", response.data);
       return response.data;
     } catch (error) {
-      console.log(error);
-    } 
-  }
+      console.error("API Error:", error);
+      throw error; 
+    }
+  };
+  
 
   const checkOut = async () => {
     try {
       setLoading(true);
-      const sendOrder:Order = {
+      
+      const sendOrder: Order = {
         cusId: user?.id,
-        totalPrice: total
+        totalPrice: total,
+      };
+      console.log("Send Order Data:", sendOrder);
+      
+      const order = await postData(`/orders`, sendOrder);
+  
+      if (!order?.id) {
+        throw new Error("Order creation failed: No order ID returned");
       }
-      console.log(sendOrder);
-      const order = await postData(`/orders` , sendOrder);
-      console.log(order);
-
-      // cart?.map(async (amulet) => {
-      //   const sendOrderdetail:OrderDetail = {
-      //     productId: amulet.id,
-      //     orderId: order?.data.id
-      //   }
-      //   await postData(`/order-details` , sendOrderdetail);
-      // })
-      // console.log("success.");
-      // setLoading(false);
-    } catch (error) {
+  
+      const promises = cart?.map(async (item) => {
+        let productId;
+  
+        if ("id" in item) {
+          productId = item.id;
+        } else if ("book_id" in item) {
+          productId = 1000 + item.book_id;
+        }
+  
+        if (productId !== undefined) {
+          const sendOrderdetail: OrderDetail = {
+            productId,
+            orderId: order.id,
+          };
+          return postData(`/order-details`, sendOrderdetail);
+        }
+      }) ?? [];
+  
+      await Promise.all(promises);
+  
+      console.log("Checkout success.");
       setLoading(false);
-      console.log(error);
+      clearCart();
+      navigate('/');
+    } catch (error) {
+      console.error("Checkout error:", error);
+      setLoading(false);
     }
-  }
-
+  };
+  
+  
+  
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold mb-10">CHECKOUT</h1>
@@ -73,6 +99,8 @@ const Checkout: React.FC = () => {
                 type="text"
                 placeholder="John Doe"
                 className="w-full border rounded-md p-2"
+                value={user?.username}
+                readOnly
                 required
               />
             </div>
@@ -83,6 +111,8 @@ const Checkout: React.FC = () => {
                 type="email"
                 placeholder="you@example.com"
                 className="w-full border rounded-md p-2"
+                value={user?.email}
+                readOnly
                 required
               />
             </div>
@@ -126,11 +156,15 @@ const Checkout: React.FC = () => {
             {cart.map((item, index) => (
               <li key={index} className="py-4 flex gap-4">
                 <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
-                <Image image={item.image} alt={item.name} />
+                  {
+                    "id" in item ? <Image image={item.image} alt={item.name} /> : <Image image={item.img} alt={item.name} />
+                  }
                 </div>
                 <div className="flex-1 text-sm">
                   <p className="font-medium">{item.name}</p>
-                  <p className="text-gray-500">{item.templeName}</p>
+                  {
+                    "id" in item ? <p className="text-gray-500">{item.templeName}</p> : <></>
+                  }
                   <p className="text-gray-500 text-xs">Qty: 1</p>
                 </div>
                 <div className="text-right font-semibold">{item.price} ฿</div>
