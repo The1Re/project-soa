@@ -16,44 +16,32 @@ const OrderHistory: React.FC = () => {
 
 
   useEffect(() => {
+    if (!userId) return;
+  
     setloading(true);
-
-    setTimeout(() => {
-      api
-        .get<Order[]>("/orders")
-        .then((response) => {
-          const userOrder = response.data.filter((o) => o.cusId === userId);
-          // console.log(userOrder);
-          setOrders(userOrder);
-        })
-        .catch(console.error)
-        .finally(() => setloading(false));
-    }, 100);
-
-    setTimeout(() => {
-      api
-        .get<Amulet[]>("/amulets")
-        .then((response) => {
-          setAmulets(response.data);
-          console.log("amulets", amulets);
-        })
-        .catch(console.error)
-        .finally(() => setloading(false));
-    }, 100);
-
-    setTimeout(() => {
-      api
-        .get<OrderDetail[]>("/order-details")
-        .then((response) => {
-          setOrderDetails(response.data);
-          console.log("od ==> ", orderDetails);
-        })
-        .catch(console.error)
-        .finally(() => setloading(false));
-    }, 100);
-
-    console.log(userId);
+  
+    Promise.all([
+      api.get<Order[]>("/orders"),
+      api.get<Amulet[]>("/amulets"),
+      api.get<OrderDetail[]>("/order-details"),
+    ])
+      .then(([orderRes, amuletRes, detailRes]) => {
+        const userOrders = orderRes.data.filter((o) => o.cusId === userId);
+        setOrders(userOrders);
+        setAmulets(amuletRes.data);
+        setOrderDetails(detailRes.data);
+  
+        console.log("amulets", amuletRes.data);
+        console.log("orderDetails", detailRes.data);
+      })
+      .catch((error) => {
+        console.error("API error:", error);
+      })
+      .finally(() => {
+        setloading(false);
+      });
   }, [userId]);
+  
 
   if (loading) {
     return <Loading />;
