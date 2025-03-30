@@ -1,18 +1,19 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { Amulet } from "../models/Amulet";
+import { Book } from "../models/Book";
 
 interface CartContextType {
-  cart: Amulet[];
-  addToCart: (amulet: Amulet) => void;
+  cart: (Amulet | Book)[];
+  addToCart: (amulet: Amulet | Book) => void;
   removeFromCart: (id: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<Amulet[]>([]);
+  const [cart, setCart] = useState<(Amulet | Book)[]>([]);
 
-  const addToCart = (amulet: Amulet) => {
+  const addToCart = (amulet: Amulet | Book) => {
     setCart((prevCart) => [...prevCart, amulet]);
   };
 
