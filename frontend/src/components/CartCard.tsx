@@ -16,7 +16,6 @@ export const CartCard = ({ item, index }: { item: Amulet | Book; index: number }
         return null;
     }
 
-
     return (
         <li className="flex py-6">
             <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
