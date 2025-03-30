@@ -80,7 +80,7 @@ export default function Header({ setOpenCart }: HeaderProps) {
                     <UserProfile {...user} />
                   </div>
                   {isProfileOpen && (
-                    <div className="absolute right-0 top-full mt-2 z-50">
+                    <div className="absolute right-[-50px] top-full mt-2 z-50">
                       <ProfileDropdown onClose={() => setProfileOpen(false)} />
                     </div>
                   )}
