@@ -11,14 +11,14 @@ function Amulets() {
 
     useEffect(() => {
         setLoading(true);
-        // api.get<Amulet[]>("/amulets")
-        //     .then((response) => {
-        //         setAmulets(response.data);
-        //     })
-        //     .catch(console.error)
-        //     .finally(() => setLoading(false));
-        setAmulets(mockAmulets);
-        setLoading(false);
+        api.get<Amulet[]>("/amulets")
+            .then((response) => {
+                setAmulets(response.data);
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false));
+        // setAmulets(mockAmulets);
+        // setLoading(false);
     }, []);
 
     if (loading) {
