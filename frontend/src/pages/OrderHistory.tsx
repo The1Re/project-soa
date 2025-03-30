@@ -1,30 +1,59 @@
 import React, { useEffect, useState } from "react";
-import { mockOrders, mockAmulets, mockOrderDetails } from "./MockData";
-import { Order } from "../models/Order";
+import { Order, OrderDetail } from "../models/Order";
 import Loading from "../components/Loading";
 import { useAuth } from "../context/AuthContext";
+import api from "../services/api";
+import Image from "../components/Image";
+import { Amulet } from "../models/Amulet";
 
 const OrderHistory: React.FC = () => {
-  const [order, setOrder] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [orderDetails, setOrderDetails] = useState<OrderDetail[]>([]);
+  const [amulets, setAmulets] = useState<Amulet[]>([]);
   const [loading, setloading] = useState<boolean>(true);
   const user = useAuth().user;
-  // console.log("userid with auth",user?.id);
   const userId = user?.id;
-  // console.log(order)
-  
+
+
   useEffect(() => {
     setloading(true);
 
     setTimeout(() => {
-      const userOrder = mockOrders.filter((o) => o.cusId === userId);
-      console.log(userOrder);
-      setOrder(userOrder);
-      setloading(false);
+      api
+        .get<Order[]>("/orders")
+        .then((response) => {
+          const userOrder = response.data.filter((o) => o.cusId === userId);
+          // console.log(userOrder);
+          setOrders(userOrder);
+        })
+        .catch(console.error)
+        .finally(() => setloading(false));
+    }, 100);
+
+    setTimeout(() => {
+      api
+        .get<Amulet[]>("/amulets")
+        .then((response) => {
+          setAmulets(response.data);
+          console.log("amulets", amulets);
+        })
+        .catch(console.error)
+        .finally(() => setloading(false));
+    }, 100);
+
+    setTimeout(() => {
+      api
+        .get<OrderDetail[]>("/order-details")
+        .then((response) => {
+          setOrderDetails(response.data);
+          console.log("od ==> ", orderDetails);
+        })
+        .catch(console.error)
+        .finally(() => setloading(false));
     }, 100);
 
     console.log(userId);
   }, [userId]);
-
 
   if (loading) {
     return <Loading />;
@@ -32,8 +61,13 @@ const OrderHistory: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="text-center text-black-500 text-lg font-semibold mt-30">
-        No user. Please log in.
+      <div className="flex flex-col items-center justify-center min-h-[50vh] p-6 bg-gray-50 rounded-lg shadow-sm">
+        <h3 className="text-xl font-semibold text-gray-700 mb-2">
+          โปรดเข้าสู่ระบบ
+        </h3>
+        <p className="text-center text-gray-500 text-lg font-semibold mt-2">
+          กรุณาเข้าสู่ระบบเพื่อดูประวัติการสั่งซื้อ
+        </p>
       </div>
     );
   }
@@ -41,60 +75,68 @@ const OrderHistory: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-6">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">
-        Order History for {user?.username}
+        ประวัติการสั่งซื้อของ {user?.username}
       </h2>
-      {order.length === 0 ? (
-        <p className="text-gray-600">No orders found.</p>
+      {orders.length === 0 ? (
+        <p className="text-gray-600">ไม่พบรายการสั่งซื้อ</p>
       ) : (
         <div className="space-y-6">
-          {order.map((order) => {
-            const orderDetails = mockOrderDetails.filter(
+          {orders.map((order) => {
+            const details = orderDetails.filter(
               (od) => od.orderId === order.id
             );
 
             return (
               <div
                 key={order.id}
-                className="bg-white shadow-md rounded-lg p-6 border border-gray-100"
+                className="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200"
               >
-                <h3 className="text-xl font-semibold mb-4 text-gray-900">
-                  Order #{order.id}
-                </h3>
+                <div className="bg-gray-50 p-4 border-b">
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    คำสั่งซื้อ #{order.id}
+                    <span className="ml-4">ราคารวม: {order.totalPrice} ฿</span>
+                  </h3>
+                </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {orderDetails.map((orderDetail) => {
-                    const amulet = mockAmulets.find(
-                      (a) => a.id === orderDetail.productId
-                    );
+                <div className="p-4">
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {details.map((d) => {
+                      const amulet = amulets.find((a) => a.id === d.productId);
 
-                    if (!amulet) return null;
+                      if (!amulet) return null;
 
-                    return (
-                      <div
-                        key={orderDetail.id}
-                        className="border rounded-md p-4 hover:shadow-sm transition-shadow"
-                      >
-                        {amulet.image && (
-                          <img
-                            src={amulet.image}
-                            alt={amulet.name}
-                            className="w-full h-48 object-cover rounded-md mb-4"
-                          />
-                        )}
+                      return (
+                        <div
+                          key={d.id}
+                          className="border rounded-md overflow-hidden hover:shadow-sm transition-shadow"
+                        >
+                          {amulet.image && (
+                            <div className="w-full aspect-square overflow-hidden">
+                              <div className="h-full w-full flex items-center justify-center">
+                                <div className="object-contain h-full w-full">
+                                  <Image
+                                    image={amulet.image}
+                                    alt={amulet.name}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          )}
 
-                        <div className="space-y-2">
-                          <p className="font-medium text-gray-900">
-                            {amulet.name}
-                          </p>
-                          <div className="text-sm text-gray-600 space-y-1">
-                            <p>Price: {amulet.price} ฿</p>
-                            <p>Temple: {amulet.templeName}</p>
-                            <p>Type: {amulet.type}</p>
+                          <div className="p-4 space-y-2">
+                            <p className="font-medium text-gray-900">
+                              {amulet.name}
+                            </p>
+                            <div className="text-sm text-gray-600 space-y-1">
+                              <p>ราคา: {amulet.price} ฿</p>
+                              <p>วัด: {amulet.templeName}</p>
+                              <p>ประเภท: {amulet.type}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             );
@@ -102,22 +144,6 @@ const OrderHistory: React.FC = () => {
         </div>
       )}
     </div>
-    // <div>
-    //   {order.map((o) => {
-    //     const orderDetails = mockOrderDetails.filter((od) => od.orderId === o.id)
-    //     return <div key={o.id}>
-    //         order#{o.id}
-    //         {orderDetails.map((od) => {
-    //           const amulet = mockAmulets.find((a) => a.id === od.productId);
-    //           return <div key={od.id}>
-    //                 {amulet?.id}
-    //                 {amulet?.name}
-    //           </div>;
-    //         })}
-    //     </div>
-    //   } )}
-
-    // </div>
   );
 };
 

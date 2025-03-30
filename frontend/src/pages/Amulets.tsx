@@ -3,7 +3,6 @@ import { Amulet } from "../models/Amulet";
 import api from "../services/api";
 import Loading from "../components/Loading";
 import AmuletCard from "../components/AmuletCard";
-import { mockAmulets } from "./MockData";
 
 function Amulets() {
     const [amulets, setAmulets] = useState<Amulet[]>([]);
@@ -17,8 +16,6 @@ function Amulets() {
             })
             .catch(console.error)
             .finally(() => setLoading(false));
-        // setAmulets(mockAmulets);
-        // setLoading(false);
     }, []);
 
     if (loading) {
