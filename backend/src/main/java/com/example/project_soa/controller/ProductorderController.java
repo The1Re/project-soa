@@ -24,9 +24,6 @@ public class ProductorderController {
 
     @Autowired
     private ProductorderService service;
-    
-    @Autowired
-    private OAuthService authService;
 
     @GetMapping
     public List<Productorder> getAllOrders() {
@@ -40,10 +37,6 @@ public class ProductorderController {
 
     @PostMapping
     public ResponseEntity<Productorder> createOrder(@RequestBody Productorder order , HttpServletRequest request) throws Exception {
-        if(!authService.isAuthenticate(request)) {
-        	return ResponseEntity.status(401).body(null);
-        }
-        
         return ResponseEntity.ok(service.createOrder(order));
     }
 

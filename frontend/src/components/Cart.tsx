@@ -59,8 +59,8 @@ export default function CartSlideOver({ open, setOpen }: CartSlideOverProps) {
                         role="list"
                         className="-my-6 divide-y divide-gray-200"
                       >
-                        {cart.map((amulet, index) => (
-                          <CartCard key={index} {...amulet} index={index} />
+                        {cart?.map((item, index) => (
+                          <CartCard key={index} item={item} index={index} />
                         ))}
                       </ul>
                     </div>
@@ -76,7 +76,7 @@ export default function CartSlideOver({ open, setOpen }: CartSlideOverProps) {
                   <div className="mt-6">
                     <Link
                       to="/checkout"
-                      className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700"
+                      className="flex items-center justify-center rounded-md border border-transparent bg-red-500 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-orange-600"
                     >
                       Checkout
                     </Link>

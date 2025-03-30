@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
-import { Amulet } from "../models/Amulet";
-import api from "../services/api";
+import bookApi from "../services/book.service";
 import Loading from "../components/Loading";
-import AmuletCard from "../components/AmuletCard";
-import AmuletFilter from "../components/AmuletFilter";
 import Breadcrumbs from "../components/Breadcrumbs";
+import { Book } from "../models/Book";
+import BookCard from "../components/BookCard";
 
-function Amulets() {
-    const [amulets, setAmulets] = useState<Amulet[]>([]);
+function Books() {
+    const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         setLoading(true);
-        api.get<Amulet[]>("/amulets")
+        bookApi.get<Book[]>("/books")
             .then((response) => {
-                console.log(response.data);
-                setAmulets(response.data);
+                setBooks(response.data.filter((book) => book.catalog === "Dhamma"));
             })
             .catch(console.error)
             .finally(() => setLoading(false));
@@ -29,24 +27,20 @@ function Amulets() {
             <Breadcrumbs items={
                 [
                     { label: "หน้าหลัก", path: "/" },
-                    { label: "พระเครื่อง" }
+                    { label: "หนังสือพระ" }
                 ]
             }/>
 
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">
-                รายการพระเครื่อง
+                รายการหนังสือพระ
             </h2>
 
-            <AmuletFilter
-                setAmulets={setAmulets}
-                setLoading={setLoading}
-            />
 
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-                {amulets?.map((amulet) => (
-                    <AmuletCard key={amulet.id} amulet={amulet} />
+                {books.map((book) => (
+                    <BookCard key={book.book_id} book={book} />
                 ))}
-                {amulets.length === 0 && (
+                {books.length === 0 && (
                     <p className="col-span-full text-center text-gray-500">
                         ไม่พบพระเครื่องตามเงื่อนไขที่เลือก
                     </p>
@@ -56,4 +50,4 @@ function Amulets() {
     );
 }
 
-export default Amulets;
+export default Books;
