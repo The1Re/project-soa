@@ -6,6 +6,8 @@ import AddAmulet from "../pages/AddAmulet";
 import Amulets from "../pages/Amulets";
 import AmuletDetail from "../pages/AmuletDetail";
 import Checkout from "../pages/Checkout";
+import Books from "../pages/Books";
+import BookDetail from "../pages/BookDetail";
 
 
 export default function AppRoutes() {
@@ -18,6 +20,8 @@ export default function AppRoutes() {
         <Route path="/amulets" element={<Amulets />} />
         <Route path="/amulets/:id" element={<AmuletDetail />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/books" element={<Books />} />
+        <Route path="/books/:id" element={<BookDetail />} />
       </Routes>
     </MainLayout>
   );
