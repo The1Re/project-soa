@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
-import amuletImage from "../assets/amulet.png";
 
 interface HeaderProps {
   setOpenCart: (open: boolean) => void;
