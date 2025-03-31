@@ -17,7 +17,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173" , allowCredentials = "true")
+@CrossOrigin(origins = "*")
 public class OAuthController {
 
 	@Autowired

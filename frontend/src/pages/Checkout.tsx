@@ -25,7 +25,7 @@ const Checkout: React.FC = () => {
 
   const postData = async (endpoint: string, data: Order | OrderDetail) => {
     try {
-      const response = await api.post(endpoint, data, { withCredentials: true });
+      const response = await api.post(endpoint, data);
       console.log("Response:", response.data);
       return response.data;
     } catch (error) {

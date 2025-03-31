@@ -18,7 +18,7 @@ import com.example.project_soa.service.UserService;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "http://localhost:5173" , allowCredentials = "true")
+@CrossOrigin(origins = "*")
 public class UserController {
 	
 	@Autowired
