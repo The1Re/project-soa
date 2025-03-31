@@ -22,7 +22,7 @@ import com.example.project_soa.service.OrderDetailService;
 
 @RestController
 @RequestMapping("/order-details")
-@CrossOrigin(origins = "http://localhost:5173" , allowCredentials = "true")
+@CrossOrigin(origins = "*")
 public class OrderDetailController {
 	@Autowired
 	protected OrderDetailService service;
