@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               image : userInfoResponse.data.picture
             }
             setUser(userInfo);
+            window.location.reload();
         } catch (error) {
             console.log(error);
         }

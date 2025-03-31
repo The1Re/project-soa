@@ -59,6 +59,7 @@ export default function Header({ setOpenCart }: HeaderProps) {
           {/* Path */}
           <div className="flex items-center">
             {path.map((item, index) => (
+              !(!isLoggedIn && item.name === "ขายพระเครื่อง") &&
               <div
                 key={index}
                 className="text-gray-600 font-medium border-gray-300 px-4 hover:text-orange-600 transition-all cursor-pointer"
