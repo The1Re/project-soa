@@ -15,6 +15,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<(Amulet | Book)[]>([]);
 
   const addToCart = (amulet: Amulet | Book) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return ;
+    }
     setCart((prevCart) => [...prevCart, amulet]);
   };
 
