@@ -3,6 +3,7 @@ import { User } from "../models/User";
 import api from "../services/api";
 import { CredentialResponse } from "@react-oauth/google";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
     user : User | null;
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
+    const navigate = useNavigate();
   
     const login = async (response: CredentialResponse) => {
         const { credential } = response;
@@ -64,6 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         console.log(response.data);
         localStorage.removeItem("token");
         setUser(null);
+        navigate("/")
       } catch (error) {
         console.log(error);
       }

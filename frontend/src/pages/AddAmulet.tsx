@@ -137,7 +137,7 @@ export default function AddAmulet() {
 
         <button
           type="submit"
-          className="w-full bg-amber-500 text-white py-2 rounded hover:bg-amber-600 transition"
+          className="w-full bg-orange-600 text-white py-2 rounded hover:bg-amber-600 transition"
         >
           ลงขาย
         </button>
