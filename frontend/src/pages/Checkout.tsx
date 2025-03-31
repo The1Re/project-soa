@@ -193,11 +193,20 @@ const Checkout: React.FC = () => {
                       <></>
                     )}
                     <div className="flex mt-1">
-                      <span className="inline-flex items-center rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-700">
-                        {
-                          "id" in item ? ("พระเครื่อง") : ("หนังสือ")
-                        }
-                      </span>
+                      {
+                        "id" in item ?
+                          (
+                            <span className="inline-flex items-center rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-700">
+                              พระเครื่อง
+                            </span>
+                          )
+                          :
+                          (
+                            <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+                              หนังสือ
+                            </span>
+                          )
+                      }
                     </div>
                   </div>
                   <div className="text-right font-medium text-orange-600">
