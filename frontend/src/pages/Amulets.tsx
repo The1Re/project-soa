@@ -9,6 +9,7 @@ import Breadcrumbs from "../components/Breadcrumbs";
 function Amulets() {
     const [amulets, setAmulets] = useState<Amulet[]>([]);
     const [loading, setLoading] = useState(true);
+    const isLoggedIn = localStorage.getItem("token");
 
     useEffect(() => {
         setLoading(true);
@@ -44,7 +45,7 @@ function Amulets() {
 
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                 {amulets?.map((amulet) => (
-                    <AmuletCard key={amulet.id} amulet={amulet} />
+                    isLoggedIn ? <AmuletCard key={amulet.id} amulet={amulet} /> : <AmuletCard key={amulet.id} amulet={amulet} isView={true} />
                 ))}
                 {amulets.length === 0 && (
                     <p className="col-span-full text-center text-gray-500">

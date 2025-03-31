@@ -8,6 +8,7 @@ import BookCard from "../components/BookCard";
 function Books() {
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(true);
+    const isLoggedIn = localStorage.getItem("token");
 
     useEffect(() => {
         setLoading(true);
@@ -38,7 +39,7 @@ function Books() {
 
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                 {books.map((book) => (
-                    <BookCard key={book.book_id} book={book} />
+                    isLoggedIn ? <BookCard key={book.book_id} book={book} /> : <BookCard key={book.book_id} book={book} isView={true} />
                 ))}
                 {books.length === 0 && (
                     <p className="col-span-full text-center text-gray-500">

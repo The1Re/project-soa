@@ -15,6 +15,7 @@ function AmuletDetail() {
     const [amulet, setAmulet] = useState<Amulet>();
     const [loading, setLoading] = useState(true);
     const [showPopup, setShowPopup] = useState<string | null>(null);
+    const isLoggedIn = localStorage.getItem("token");
 
     useEffect(() => {
         setLoading(true);
@@ -96,15 +97,19 @@ function AmuletDetail() {
                     </div>
 
                     {/* Contact/Buy button */}
-                    <div className="mt-8">
-                        <button
-                            type="button"
-                            className="cursor-pointer flex w-full items-center justify-center rounded-md border border-transparent bg-orange-600 px-8 py-3 text-base font-medium text-white hover:bg-orange-700"
-                            onClick={() => add()}
-                        >
-                            เพิ่มลงตะกร้า
-                        </button>
-                    </div>
+                    {
+                        isLoggedIn && (
+                            <div className="mt-8">
+                                <button
+                                    type="button"
+                                    className="cursor-pointer flex w-full items-center justify-center rounded-md border border-transparent bg-orange-600 px-8 py-3 text-base font-medium text-white hover:bg-orange-700"
+                                    onClick={() => add()}
+                                >
+                                    เพิ่มลงตะกร้า
+                                </button>
+                            </div>
+                        )
+                    }
 
                     {/* Additional details section - you can expand this later */}
                     <div className="mt-6">
