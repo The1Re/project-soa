@@ -50,8 +50,8 @@ export default function Header({ setOpenCart }: HeaderProps) {
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center px-6 py-4">
         {/* Logo */}
-        <div className="text-2xl font-bold text-gray-800 hover:text-orange-600 transition-colors">
-          Logo
+        <div className="text-2xl font-bold w-2xs flex text-gray-800 hover:text-orange-600 transition-colors">
+          ตลาดพระเครื่อง
         </div>
 
         {/* Right Side Navigation */}
